@@ -38,12 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(centros => {
         const selectCentro = document.querySelector('#element_3');
         
-        // Ordenar los centros alfabéticamente
-        centros.sort((a, b) => a.localeCompare(b)).forEach(centro => {
-          if (centro) { // Evitar agregar centros vacíos
-            selectCentro.add(new Option(centro, centro));
-          }
-        });
         bloquearElemento3(false);  // Habilitar element_3 después de cargar los centros
       })
       .catch(err => console.error('Error al cargar centros:', err));
