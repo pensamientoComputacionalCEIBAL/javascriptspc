@@ -79,6 +79,7 @@ document.querySelector('#element_2').addEventListener('change', function() {
 document.querySelector('#element_3').addEventListener('change', volcarSeleccionAElemento8);
 
 // Ejecutar la carga de departamentos al iniciar
+document.title = "Primeros pasos en Pensamiento Computacional";  
 cargarDepartamentos();
 
 });
