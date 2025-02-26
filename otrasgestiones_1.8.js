@@ -12,7 +12,7 @@ $('#element_2').change(function(){
     case "Cristofer Cabrera": $("#element_3").val('crcabrera@ceibal.edu.uy'); break;
     case "Diego Texeira": $("#element_3").val('dtexeira@ceibal.edu.uy'); break;
     case "Emilia Casaravilla": $("#element_3").val('ecasaravilla@ceibal.edu.uy'); break;
-    case "Facundo Costa": $("#element_3").val('ecosta@ceibal.edu.uy'); break;
+    case "Patricia Mosquera": $("#element_3").val('amosquera@ceibal.edu.uy'); break;
     case "Federico Touya": $("#element_3").val('ftouya@ceibal.edu.uy'); break;
     case "Flavia Altolaguirre": $("#element_3").val('faltolaguirre@ceibal.edu.uy'); break;
     case "Florencia Pilatti Conde": $("#element_3").val('fpilatti@ceibal.edu.uy'); break;
