@@ -3,24 +3,28 @@ document.addEventListener('DOMContentLoaded', function () {
   const urlBase = 'https://script.google.com/macros/s/AKfycbyw0feBuxUbjyn6yd7NdYopre_3D-d4ztDK0aaxx8fqNcTi5mH8u0pkaMSsHuPRi7Sp/exec';
 
   // Función para cargar los departamentos en element_2
-  function cargarDepartamentos() {
-    fetch(urlBase)
-      .then(res => res.json())
-      .then(departamentos => {
-        const selectDepto = document.querySelector('#element_2');
-        selectDepto.innerHTML = '<option value="" disabled selected>Selecciona un departamento</option>';
+function cargarDepartamentos() {
+  fetch(urlBase)
+    .then(res => res.json())
+    .then(departamentos => {
+      const selectDepto = document.querySelector('#element_2');
+      selectDepto.innerHTML = '<option value="" disabled selected>Selecciona un departamento</option>';
 
-        // Cargar departamentos únicos (ordenados por aparición)
-        const departamentosUnicos = [...new Set(departamentos.map(d => d.Departamento.trim()))];
-        departamentosUnicos.forEach(depto => {
-          if (depto) selectDepto.add(new Option(depto, depto));
-        });
+      // Filtrar departamentos válidos y evitar errores con 'undefined'
+      const departamentosUnicos = [...new Set(departamentos
+        .map(d => d.Departamento ? d.Departamento.trim() : '')  // Verificar que 'Departamento' existe antes de aplicar 'trim'
+        .filter(d => d !== '')  // Filtrar valores vacíos
+      )];
 
-        bloquearElemento3(true);  // Bloquear element_3 al inicio
-        limpiarElemento8();      // Limpiar element_8 al iniciar
-      })
-      .catch(err => console.error('❌ Error al cargar departamentos:', err));
-  }
+      departamentosUnicos.forEach(depto => {
+        if (depto) selectDepto.add(new Option(depto, depto));
+      });
+
+      bloquearElemento3(true);  // Bloquear element_3 al inicio
+      limpiarElemento8();      // Limpiar element_8 al iniciar
+    })
+    .catch(err => console.error('❌ Error al cargar departamentos:', err));
+}
 
   // Función para cargar los centros según el departamento y la fila
   function cargarCentros(departamento, fila) {
