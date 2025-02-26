@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Aquí va todo el código del script.js
   
   // URL de tu Google Apps Script
-  const urlBase = 'https://script.google.com/macros/s/AKfycbyL8myBlPxzIlDndzlkV5VGokBYTTxjr93RIPXU9TSdHDufKzXui-egWTz7638ljBfb/exec';
+  const urlBase = 'https://script.google.com/macros/s/AKfycbyw0feBuxUbjyn6yd7NdYopre_3D-d4ztDK0aaxx8fqNcTi5mH8u0pkaMSsHuPRi7Sp/exec';
 
   // Función para cargar los departamentos en element_2
   function cargarDepartamentos() {
