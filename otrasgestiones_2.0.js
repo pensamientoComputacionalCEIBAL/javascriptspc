@@ -56,9 +56,11 @@ let noches = document.getElementById('element_43');
   
 });
 
-pernocta.addEventListener('click', function() { actualizarFechas(); });
-no_pernocta.addEventListener('click', function() { actualizarFechas(); });
-noches.addEventListener('change', function() { actualizarFechas(); });
+if (pernocta) pernocta.addEventListener('click', function() { actualizarFechas(); });
+
+if (no_pernocta) no_pernocta.addEventListener('click', function() { actualizarFechas(); });
+
+if (noches) noches.addEventListener('change', function() { actualizarFechas(); });
 
 // Función para actualizar las fechas, horas y validar el orden
 function actualizarFechas() {
