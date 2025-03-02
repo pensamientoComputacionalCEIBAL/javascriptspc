@@ -191,4 +191,4 @@ function calcularDiferenciaLlegadaFin(fechaLlegada, horaFin) {
   return (fechaObj - fechaHoraFin) / (1000 * 60 * 60);
 }
 
-}
+});
