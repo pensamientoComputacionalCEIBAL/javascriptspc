@@ -98,13 +98,15 @@ function actualizarFechas() {
   if (fecha_salida && hora_inicio && !estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin)) {
     const diferenciaHorasSalida = calcularDiferenciaHoras(fecha_salida, hora_inicio);
     viaje = determinarViajes (diferenciaHorasSalida.toFixed(2));
-    resultado += `- Corresponde un: ${viaje} (${diferenciaHorasSalida.toFixed(2)} hs.). Diferencia entre la hora de salida y el inicio de la jornada laboral.\n`;
+    // resultado += `- Corresponde un: ${viaje} (${diferenciaHorasSalida.toFixed(2)} hs.). Diferencia entre la hora de salida y el inicio de la jornada laboral.\n`;
+    resultado += `- Corresponde un: ${viaje}.\n`;
   }
 
   if (fecha_llegada && hora_fin) {
     const diferenciaHorasLlegada = calcularDiferenciaLlegadaFin(fecha_llegada, hora_fin);
     viaje = determinarViajes (diferenciaHorasLlegada.toFixed(2));
-    resultado += `- Corresponde un: ${viaje} (${diferenciaHorasLlegada.toFixed(2)} hs. calculadas). Diferencia entre la hora de llegada y el fin de la jornada laboral.\n`;
+    // resultado += `- Corresponde un: ${viaje} (${diferenciaHorasLlegada.toFixed(2)} hs. calculadas). Diferencia entre la hora de llegada y el fin de la jornada laboral.\n`;
+    resultado += `- Corresponde un: ${viaje}.\n`;
   }
 
   if (campoError) campoError.value = resultado;
