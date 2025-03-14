@@ -92,14 +92,29 @@ function actualizarFechas() {
 
   if (pernocta.checked) {
     let nocheCantidad = noches.value;
-    if (nocheCantidad) { resultado += `- Corresponde ${nocheCantidad} ciclo/s de 24hs.\n`; }    
+    if (nocheCantidad) { resultado += `- Corresponde ${nocheCantidad} ciclo/s de 24hs.\n`; }
+
+    let fecha_salida_date = new Date(fecha_salida.replace(' ', 'T'));
+    let fecha_fin_jornada = new Date(`${fecha_salida_date.toISOString().split('T')[0]}T${hora_fin}:00`);
+
+    if (fecha_salida_date <= fecha_fin_jornada) {
+    if (fecha_salida && hora_inicio && !estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin)) {
+      const diferenciaHorasSalida = calcularDiferenciaHoras(fecha_salida, hora_inicio);
+      viaje = determinarViajes (diferenciaHorasSalida.toFixed(2));
+      // resultado += `- Corresponde un: ${viaje} (${diferenciaHorasSalida.toFixed(2)} hs.). Diferencia entre la hora de salida y el inicio de la jornada laboral.\n`;
+      resultado += `- Corresponde un: ${viaje}.\n`;
+    }
+    }
+    
   }
 
-  if (fecha_salida && hora_inicio && !estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin)) {
-    const diferenciaHorasSalida = calcularDiferenciaHoras(fecha_salida, hora_inicio);
-    viaje = determinarViajes (diferenciaHorasSalida.toFixed(2));
-    // resultado += `- Corresponde un: ${viaje} (${diferenciaHorasSalida.toFixed(2)} hs.). Diferencia entre la hora de salida y el inicio de la jornada laboral.\n`;
-    resultado += `- Corresponde un: ${viaje}.\n`;
+  if (!pernocta.checked) {
+    if (fecha_salida && hora_inicio && !estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin)) {
+      const diferenciaHorasSalida = calcularDiferenciaHoras(fecha_salida, hora_inicio);
+      viaje = determinarViajes (diferenciaHorasSalida.toFixed(2));
+      // resultado += `- Corresponde un: ${viaje} (${diferenciaHorasSalida.toFixed(2)} hs.). Diferencia entre la hora de salida y el inicio de la jornada laboral.\n`;
+      resultado += `- Corresponde un: ${viaje}.\n`;
+    }
   }
 
   if (fecha_llegada && hora_fin) {
