@@ -88,10 +88,13 @@ function actualizarFechas() {
   }
 
   // **Nueva validación: Fechas y horarios coinciden dentro del horario laboral**
+  const fecha_salida_soloFecha = fecha_salida.split(' ')[0]; // Extrae solo la fecha
+  const fecha_llegada_soloFecha = fecha_llegada.split(' ')[0]; // Extrae solo la fecha
+
   if (
-    fecha_salida === fecha_llegada &&
-    estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin) &&
-    estaEnHorarioLaboral(fecha_llegada, hora_fin, hora_fin)
+    fecha_salida_soloFecha === fecha_llegada_soloFecha && // Fechas iguales
+    estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin) && // Horario de salida dentro del horario laboral
+    estaEnHorarioLaboral(fecha_llegada, hora_fin, hora_fin) // Horario de llegada dentro del horario laboral
   ) {
     if (campoError) campoError.value = '❌ Error: La fecha de salida y llegada coinciden y el horario está dentro del horario laboral.';
     return;
