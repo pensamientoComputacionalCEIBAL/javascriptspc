@@ -87,6 +87,16 @@ function actualizarFechas() {
     }
   }
 
+  // **Nueva validación: Fechas y horarios coinciden dentro del horario laboral**
+  if (
+    fecha_salida === fecha_llegada &&
+    estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin) &&
+    estaEnHorarioLaboral(fecha_llegada, hora_fin, hora_fin)
+  ) {
+    if (campoError) campoError.value = '❌ Error: La fecha de salida y llegada coinciden y el horario está dentro del horario laboral.';
+    return;
+  }
+
   let resultado = '';
   let totalHorasViaje = 0; // Acumulador para sumar horas de viaje
 
