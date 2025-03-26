@@ -64,10 +64,10 @@ if (noches) noches.addEventListener('change', function() { actualizarFechas(); }
 
 // Función para actualizar las fechas, horas y validar el orden
 function actualizarFechas() {
-  fecha_salida = construirFecha('element_8', 'element_7');
-  fecha_llegada = construirFecha('element_9', 'element_10');
-  hora_inicio = construirHora('element_40');
-  hora_fin = construirHora('element_41');
+  let fecha_salida = construirFecha('element_8', 'element_7');
+  let fecha_llegada = construirFecha('element_9', 'element_10');
+  let hora_inicio = construirHora('element_40');
+  let hora_fin = construirHora('element_41');
 
   const campoError = document.getElementById('element_34');
   if (campoError) campoError.value = '';
@@ -84,45 +84,39 @@ function actualizarFechas() {
     if (horaI > horaF || (horaI === horaF && minI >= minF)) {
       if (campoError) campoError.value = '❌ Error: La hora de inicio debe ser menor que la hora de fin.';
       return;
-    } 
+    }
   }
 
   let resultado = '';
-  let viaje = "";
+  let totalHorasViaje = 0; // Acumulador para sumar horas de viaje
 
   if (pernocta.checked) {
     let nocheCantidad = noches.value;
-    if (nocheCantidad) { resultado += `- Corresponde ${nocheCantidad} ciclo/s de 24hs.\n`; }
+    if (nocheCantidad) resultado += `- Corresponde ${nocheCantidad} ciclo/s de 24hs.\n`;
 
-    let fecha_salida_date = new Date(fecha_salida.replace(' ', 'T'));
-    let fecha_fin_jornada = new Date(`${fecha_salida_date.toISOString().split('T')[0]}T${hora_fin}:00`);
+    let fecha_salida_date = new Date(`${fecha_salida}T${hora_inicio}:00`);
+    let fecha_fin_jornada = new Date(`${fecha_salida}T${hora_fin}:00`);
 
     if (fecha_salida_date <= fecha_fin_jornada) {
-    if (fecha_salida && hora_inicio && !estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin)) {
-      const diferenciaHorasSalida = calcularDiferenciaHoras(fecha_salida, hora_inicio);
-      viaje = determinarViajes (diferenciaHorasSalida.toFixed(2));
-      // resultado += `- Corresponde un: ${viaje} (${diferenciaHorasSalida.toFixed(2)} hs.). Diferencia entre la hora de salida y el inicio de la jornada laboral.\n`;
-      resultado += `- Corresponde un: ${viaje}.\n`;
+      if (!estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin)) {
+        totalHorasViaje += calcularDiferenciaHoras(fecha_salida, hora_inicio);
+      }
     }
-    }
-    
   }
 
   if (!pernocta.checked) {
     if (fecha_salida && hora_inicio && !estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin)) {
-      const diferenciaHorasSalida = calcularDiferenciaHoras(fecha_salida, hora_inicio);
-      viaje = determinarViajes (diferenciaHorasSalida.toFixed(2));
-      // resultado += `- Corresponde un: ${viaje} (${diferenciaHorasSalida.toFixed(2)} hs.). Diferencia entre la hora de salida y el inicio de la jornada laboral.\n`;
-      resultado += `- Corresponde un: ${viaje}.\n`;
+      totalHorasViaje += calcularDiferenciaHoras(fecha_salida, hora_inicio);
     }
   }
 
   if (fecha_llegada && hora_fin) {
-    const diferenciaHorasLlegada = calcularDiferenciaLlegadaFin(fecha_llegada, hora_fin);
-    viaje = determinarViajes (diferenciaHorasLlegada.toFixed(2));
-    // resultado += `- Corresponde un: ${viaje} (${diferenciaHorasLlegada.toFixed(2)} hs. calculadas). Diferencia entre la hora de llegada y el fin de la jornada laboral.\n`;
-    resultado += `- Corresponde un: ${viaje}.\n`;
+    totalHorasViaje += calcularDiferenciaLlegadaFin(fecha_llegada, hora_fin);
   }
+
+  // Determinar el viaje final con la suma total de horas
+  let viaje = determinarViajes(totalHorasViaje.toFixed(2));
+  resultado += `- Corresponde un total de: ${viaje}.\n`;
 
   if (campoError) campoError.value = resultado;
 }
