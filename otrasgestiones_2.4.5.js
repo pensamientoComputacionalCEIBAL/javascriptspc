@@ -93,8 +93,8 @@ function actualizarFechas() {
     return;
   } 
   
-  const fecha_salida_soloFecha = fecha_salida.split(' ')[0]; // Extrae solo la fecha
-  const fecha_llegada_soloFecha = fecha_llegada.split(' ')[0]; // Extrae solo la fecha
+  let fecha_salida_soloFecha = fecha_salida.split(' ')[0]; // Extrae solo la fecha
+  let fecha_llegada_soloFecha = fecha_llegada.split(' ')[0]; // Extrae solo la fecha
 
   if (
     fecha_salida_soloFecha === fecha_llegada_soloFecha && // Fechas iguales
@@ -117,14 +117,14 @@ function actualizarFechas() {
 
     if (fecha_salida_date <= fecha_fin_jornada) {
       if (!estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin)) {
-        totalHorasViaje += calcularDiferenciaHoras(fecha_salida, hora_inicio);
+        totalHorasViaje += calcularDiferenciaHoras(fecha_salida, hora_inicio, fecha_llegada);
       }
     }
   }
 
   if (!pernocta.checked) {
     if (fecha_salida && hora_inicio && !estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin)) {
-      totalHorasViaje += calcularDiferenciaHoras(fecha_salida, hora_inicio);
+      totalHorasViaje += calcularDiferenciaHoras(fecha_salida, hora_inicio, fecha_llegada);
     }
   }
 
@@ -190,8 +190,13 @@ function estaEnHorarioLaboral(fecha, inicio, fin) {
 }
 
 // Función para calcular la diferencia de horas entre dos fechas
-function calcularDiferenciaHoras(fecha, hora) {
+function calcularDiferenciaHoras(fecha, hora, fecha_llegada) {
  if (!fecha || !hora) return 0;
+
+ let fecha_salida_soloFecha = fecha.split(' ')[0]; // Extrae solo la fecha
+ let fecha_llegada_soloFecha = fecha_llegada.split(' ')[0]; // Extrae solo la fecha
+ 
+  if (fecha_salida_soloFecha === fecha_llegada_soloFecha) return 0;
 
  const fechaObj = new Date(fecha);
  const [horaH, minH] = hora.split(':').map(Number);
