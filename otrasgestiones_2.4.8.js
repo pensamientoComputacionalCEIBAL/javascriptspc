@@ -112,8 +112,9 @@ function actualizarFechas() {
     let nocheCantidad = noches.value;
     if (nocheCantidad) resultado += `- Corresponde ${nocheCantidad} ciclo/s de 24hs.\n`;
 
-    let fecha_salida_date = new Date(fecha_salida.replace(' ', 'T'));
-    let fecha_fin_jornada = new Date(`${fecha_salida_date.toISOString().split('T')[0]}T${hora_fin}:00`); // ✅ Corregido
+let fecha_salida_date = new Date(fecha_salida.replace(' ', 'T'));
+let fecha_fin_jornada = new Date(`${fecha_salida_date.toISOString().split('T')[0]}T${hora_fin}:00`);
+
 
     if (fecha_salida_date <= fecha_fin_jornada) {
       if (!estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin)) {
