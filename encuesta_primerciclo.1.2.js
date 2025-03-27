@@ -1,8 +1,9 @@
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        console.log("MachForm: Script de salto de página cargado."); // Mensaje de prueba
 
-        // Verificar si la URL contiene "page=1"
+<script>
+    $(document).ready(function() {
+        console.log("MachForm: jQuery script cargado y ejecutado.");
+
+        // Verificar si estamos en la página 1
         if (window.location.href.includes("page=1")) {
             console.log("MachForm: Detectada la página 1, redirigiendo a la página 2...");
             window.location.href = window.location.href.replace("page=1", "page=2");
@@ -11,3 +12,4 @@
         }
     });
 </script>
+
