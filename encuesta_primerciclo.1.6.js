@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
   console.log("MachForm: URL actual", urlActual);
 
   // Si la URL es la página 1 específica, redirigir a la página 2
-  if (urlActual === "https://machform.ceibal.edu.uy/formularios/view.php?id=2622663") {
+  if (urlActual === "https://machform.ceibal.edu.uy/formularios/view.php?id=2622663" ||
+  urlActual === "https://machform.ceibal.edu.uy/formularios/view.php?id=2622663&mf_page=1") {
     console.log("MachForm: Página 1 detectada, redirigiendo a la página 2...");
     // Redirigir a la siguiente página
     window.location.href = urlActual + "&mf_page=2"; // Asegúrate que la URL de la página 2 sea esta
