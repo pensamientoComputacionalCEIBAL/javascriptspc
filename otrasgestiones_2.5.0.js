@@ -2,6 +2,8 @@ console.log("Script funcionando correctamente :)");
 
 $(document).ready(function(){
 
+// Primera parte, para cargar automáticamente los correos.
+
 $('#element_2').change(function(){
   switch($("#element_2 :selected").text()) {
     case "Agustín Romano": $("#element_3").val('aromano@ceibal.edu.uy'); break;
@@ -35,16 +37,18 @@ $('#element_2').change(function(){
   }
 });
 
+// Algoritmo principal para los viajes y ciclos.
+
 // Variables globales
 let fecha_salida = null;
 let fecha_llegada = null;
 let hora_inicio = null;
 let hora_fin = null;
-let pernocta = document.getElementById('element_37_1');
-let no_pernocta = document.getElementById('element_37_2');
-let noches = document.getElementById('element_43');
+let pernocta = document.getElementById('element_37_1'); // botón de opción 'Si'
+let no_pernocta = document.getElementById('element_37_2'); // botón de opción 'No'
+let noches = document.getElementById('element_43'); // lista desplegable '¿Cuántas noches?'
 
-// Añadir eventos a los campos
+// Añadir eventos a los campos: 8 y 7 es 'Desde', 9 y 10 'Hasta' y, 40 y 41 la jornada laboral.
 ['element_8', 'element_7', 'element_9', 'element_10', 'element_40', 'element_41'].forEach(id => {
   for (let i = 1; i <= 3; i++) {
     const campo = document.getElementById(`${id}_${i}`); 
@@ -53,9 +57,9 @@ let noches = document.getElementById('element_43');
   for (let i = 1; i <= 2; i++) {
     const campoHora = document.getElementById(`${id}_${i}`); 
     if (campoHora) campoHora.addEventListener('blur', actualizarFechas); }
-  
 });
 
+// Añadir eventos a otros elementos: botones de opción y lista desplegable.
 if (pernocta) pernocta.addEventListener('click', function() { actualizarFechas(); });
 
 if (no_pernocta) no_pernocta.addEventListener('click', function() { actualizarFechas(); });
@@ -64,19 +68,26 @@ if (noches) noches.addEventListener('change', function() { actualizarFechas(); }
 
 // Función para actualizar las fechas, horas y validar el orden
 function actualizarFechas() {
-  let fecha_salida = construirFecha('element_8', 'element_7');
-  let fecha_llegada = construirFecha('element_9', 'element_10');
-  let hora_inicio = construirHora('element_40');
-  let hora_fin = construirHora('element_41');
+  let fecha_salida = construirFecha('element_8', 'element_7'); // Construye la fecha y hora de la SALIDA.
+  let fecha_llegada = construirFecha('element_9', 'element_10'); // Construye la fecha y hora de la LLEGADA.
+  let hora_inicio = construirHora('element_40'); // Inicio de la jornada laboral.
+  let hora_fin = construirHora('element_41'); // Fin de la jornada laboral.
 
-  const campoError = document.getElementById('element_34');
+  const campoError = document.getElementById('element_34'); // Aquí aparecen los resultados.
   if (campoError) campoError.value = '';
 
-  if (fecha_salida && fecha_llegada && new Date(fecha_salida) > new Date(fecha_llegada)) {
+  // Consistencia entre la fecha y hora de SALIDA y LLEGADA.
+  if (!fecha_salida || !fecha_llegada) {
+  if (campoError) campoError.value = '❌ Error: Debes ingresar la fecha de salida y la fecha de llegada.';
+    return;
+  }
+
+  if (fecha_salida && fecha_llegada && new Date(fecha_salida) >= new Date(fecha_llegada)) {
     if (campoError) campoError.value = '❌ Error: La fecha de salida no puede ser mayor a la fecha de llegada.';
     return;
   }
 
+  // Consistencia en el horario laboral.
   if (hora_inicio && hora_fin) {
     const [horaI, minI] = hora_inicio.split(':').map(Number);
     const [horaF, minF] = hora_fin.split(':').map(Number);
@@ -86,13 +97,11 @@ function actualizarFechas() {
       return;
     }
   }
-
-  // **Nueva validación: Fechas y horarios coinciden dentro del horario laboral**
-  if (!fecha_salida || !fecha_llegada) {
-  if (campoError) campoError.value = '❌ Error: Debes ingresar la fecha de salida y la fecha de llegada.';
+  else {
+    if (campoError) campoError.value = '❌ Error: Es necesario especificar la jornada laboral.';
     return;
-  } 
-  
+  }
+
   let fecha_salida_soloFecha = fecha_salida.split(' ')[0]; // Extrae solo la fecha
   let fecha_llegada_soloFecha = fecha_llegada.split(' ')[0]; // Extrae solo la fecha
 
@@ -105,6 +114,8 @@ function actualizarFechas() {
     return;
   }
 
+  // Aquí comienza el cálculo 'real', ya no se validan más errores.
+
   let resultado = '';
   let totalHorasViaje = 0; // Acumulador para sumar horas de viaje
 
@@ -112,26 +123,25 @@ function actualizarFechas() {
     let nocheCantidad = noches.value;
     if (nocheCantidad) resultado += `- Corresponde ${nocheCantidad} ciclo/s de 24hs.\n`;
 
-let fecha_salida_date = new Date(fecha_salida.replace(' ', 'T'));
-let fecha_fin_jornada = new Date(`${fecha_salida_date.toISOString().split('T')[0]}T${hora_fin}:00`);
-
-
+    let fecha_salida_date = new Date(fecha_salida.replace(' ', 'T')); // ¿Cuando salí hacia Ceibal?
+    let fecha_fin_jornada = new Date(`${fecha_salida_date.toISOString().split('T')[0]}T${hora_fin}:00`); // Idem. pero con la hora del 'fin de jornada'.
+    
+    // Si 'salí' después de mi jornada laboral NO cuenta. Tampoco si está dentro del horario laboral.
     if (fecha_salida_date <= fecha_fin_jornada) {
       if (!estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin)) {
         totalHorasViaje += calcularDiferenciaHoras(fecha_salida, hora_inicio);
       }
     }
   }
-
+  
+  // NO debe estar en 'horario laboral'.
   if (!pernocta.checked) {
     if (fecha_salida && hora_inicio && !estaEnHorarioLaboral(fecha_salida, hora_inicio, hora_fin)) {
       totalHorasViaje += calcularDiferenciaHoras(fecha_salida, hora_inicio);
     }
   }
 
-  if (fecha_llegada && hora_fin) {
-    totalHorasViaje += calcularDiferenciaLlegadaFin(fecha_llegada, hora_fin);
-  }
+  if (fecha_llegada && hora_fin) { totalHorasViaje += calcularDiferenciaLlegadaFin(fecha_llegada, hora_fin); }
 
   // Determinar el viaje final con la suma total de horas
   let viaje = determinarViajes(totalHorasViaje.toFixed(2));
@@ -215,7 +225,6 @@ function calcularDiferenciaLlegadaFin(fechaLlegada, horaFin) {
   const fechaHoraFin = new Date(fechaObj);
   fechaHoraFin.setHours(horaH, minH);
 
-  // Si fechaHoraFin es mayor, restamos un día a fechaHoraFin para calcular correctamente
   if (fechaHoraFin > fechaObj) { fechaObj.setDate(fechaObj.getDate() + 1);  }
 
   return (fechaObj - fechaHoraFin) / (1000 * 60 * 60);
