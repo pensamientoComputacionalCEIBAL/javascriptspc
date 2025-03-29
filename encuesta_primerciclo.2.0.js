@@ -23,8 +23,8 @@ $(document).ready(function() {
     return; // Detenemos la ejecución si faltan elementos
   }
 
-  element21.addEventListener('input', async function () {
-    let inputValue = this.value.trim();
+  async function fetchData() {
+    let inputValue = element21.value.trim();
     if (inputValue === '') return;
 
     let url = `https://script.google.com/macros/s/AKfycby5XuDrutY3kUdoRGACEal48lDLYsr3KnEiYZ6hAk6G8Hu0qK1IYLywycLmIwSDSaD0hg/exec?buscar=${encodeURIComponent(inputValue)}`;
@@ -37,6 +37,10 @@ $(document).ready(function() {
       console.error('Error al obtener la respuesta:', error);
       element22.value = 'No hay respuesta asociada al documento que has ingresado.';
     }
-  });
+  }
+
+  element21.addEventListener('input', fetchData);
+  element21.addEventListener('blur', fetchData); // Se ejecuta al perder el foco
 
 });
+
