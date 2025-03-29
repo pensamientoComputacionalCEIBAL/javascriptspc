@@ -1,5 +1,6 @@
 $(document).ready(function() {
   console.log("Script funcionando correctamente.");
+
   /*
   // Script para saltear la primera página.
   let urlActual = window.location.href;
@@ -12,9 +13,17 @@ $(document).ready(function() {
     else { urlActual = urlActual.replace("&mf_page=1", "&mf_page=2"); }
     window.location.href = urlActual;
   }
-  else { console.log("MachForm: No estamos en la página 1, el script no hará nada."); }*/
+  else { console.log("MachForm: No estamos en la página 1, el script no hará nada."); } */
 
-  document.getElementById('element_21').addEventListener('input', async function () {
+  let element21 = document.getElementById('element_21');
+  let element22 = document.getElementById('element_22');
+
+  if (!element21 || !element22) {
+    console.warn("Uno o ambos elementos ('element_21' o 'element_22') no existen en el DOM.");
+    return; // Detenemos la ejecución si faltan elementos
+  }
+
+  element21.addEventListener('input', async function () {
     let inputValue = this.value.trim();
     if (inputValue === '') return;
 
@@ -23,11 +32,11 @@ $(document).ready(function() {
     try {
       let response = await fetch(url);
       let data = await response.text();
-      document.getElementById('element_22').value = data.trim() || 'No hay respuesta asociada al documento que has ingresado.';
+      element22.value = data.trim() || 'No hay respuesta asociada al documento que has ingresado.';
     } catch (error) {
       console.error('Error al obtener la respuesta:', error);
-      document.getElementById('element_22').value = 'No hay respuesta asociada al documento que has ingresado.';
+      element22.value = 'No hay respuesta asociada al documento que has ingresado.';
     }
   });
-  
+
 });
