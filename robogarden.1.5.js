@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
     
     if (boton) boton.disabled = true;
     
-    async function validarDocumento() {
-        let documento = inputDocumento.value;
+    inputDocumento.addEventListener("input", async function (event) {
+        let documento = event.target.value;
         let url = `https://script.google.com/macros/s/AKfycbyJVKBWRSwpzcfBZBQSQrE422zZop-OU7kxzti5-gc_-KPoVabxDL7lGrZQClZVKitLMg/exec?documento=${encodeURIComponent(documento)}`;
 
         boton.disabled = true;
@@ -29,12 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
             boton.disabled = true;
             boton.value = "Valor no encontrado, por favor, vuelva a intentarlo";
         }
-    }
-    
-    inputDocumento.addEventListener("input", validarDocumento);
-    boton.addEventListener("click", async function (event) {
-        event.preventDefault();
-        await validarDocumento();
     });
 });
 
