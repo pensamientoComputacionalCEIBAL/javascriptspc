@@ -30,10 +30,4 @@ document.addEventListener("DOMContentLoaded", function () {
         boton.value = "Valor no encontrado, por favor, vuelva a intentarlo";
       }
     }
-    
-    inputDocumento.addEventListener("input", validarDocumento);
-    boton.addEventListener("click", async function (event) {
-        event.preventDefault();
-        await validarDocumento();
-    });
 });
