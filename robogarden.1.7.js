@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  let boton = document.querySelector("input[value='Siguiente paso']");
+  let boton = document.querySelector("input[value='...']");
   let inputDocumento = document.getElementById("element_1");
     
   if (boton) boton.disabled = true;
@@ -21,13 +21,13 @@ document.addEventListener("DOMContentLoaded", function () {
         //console.log("Documento válido, botón habilitado.");
       } else {
         boton.disabled = true;
-        boton.value = "Valor no encontrado, por favor, vuelva a intentarlo";
+        boton.value = "Valor no encontrado, por favor, vuelve a intentarlo";
         //console.log("Documento no válido, botón deshabilitado.");
       }
       } catch (error) {
         console.error("Error al consultar la API:", error);
         boton.disabled = true;
-        boton.value = "Valor no encontrado, por favor, vuelva a intentarlo";
+        boton.value = "Valor no encontrado, por favor, vuelve a intentarlo";
       }
   });
 });
