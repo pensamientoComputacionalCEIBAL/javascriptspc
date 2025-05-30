@@ -1,4 +1,3 @@
-<script>
 document.addEventListener('DOMContentLoaded', function () {
   const inputDocumento = document.getElementById('element_1');
   const selectTexto = document.getElementById('element_2');
@@ -85,4 +84,3 @@ document.addEventListener('DOMContentLoaded', function () {
   resetSelect();
   inputCodigo.value = '';
 });
-</script>
