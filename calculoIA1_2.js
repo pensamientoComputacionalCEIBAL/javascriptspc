@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  console.log("Script funcionando correctamente :)");
+  console.log("Script funcionando correctamente :) 1_2");
 
   $('#element_2').change(function () {
     const nombre = $("#element_2 :selected").text();
@@ -133,7 +133,76 @@ $(document).ready(function () {
   const cc = a + b;
   const ASSISTANT_ID = "asst_xGFmQgITR0JyF381hcrvclIE";
   let threadId = null;
+ async function getAIResponse(prompt) {
+  try {
+    if (!threadId) {
+      const res = await fetch("https://api.openai.com/v1/threads", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${cc}`,
+          "Content-Type": "application/json",
+          "OpenAI-Beta": "assistants=v2"
+        }
+      });
+      const data = await res.json();
+      if (!data.id) return "❌ No se pudo crear el hilo (thread).";
+      threadId = data.id;
+    }
 
+    const messageRes = await fetch(`https://api.openai.com/v1/threads/${threadId}/messages`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${cc}`,
+        "Content-Type": "application/json",
+        "OpenAI-Beta": "assistants=v2"
+      },
+      body: JSON.stringify({ role: "user", content: prompt })
+    });
+
+    const runRes = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${cc}`,
+        "Content-Type": "application/json",
+        "OpenAI-Beta": "assistants=v2"
+      },
+      body: JSON.stringify({ assistant_id: ASSISTANT_ID })
+    });
+
+    const runData = await runRes.json();
+    if (!runData.id) return "❌ No se pudo iniciar el análisis del Assistant.";
+    let runId = runData.id;
+    let status = runData.status || "queued";
+
+    // Esperar a que se complete el run
+    while (status !== "completed" && status !== "failed") {
+      await new Promise(res => setTimeout(res, 2000));
+      const statusCheck = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs/${runId}`, {
+        headers: {
+          "Authorization": `Bearer ${cc}`,
+          "OpenAI-Beta": "assistants=v2"
+        }
+      });
+      const sData = await statusCheck.json();
+      status = sData.status;
+    }
+
+    if (status === "failed") return "❌ El Assistant falló.";
+
+    const messagesRes = await fetch(`https://api.openai.com/v1/threads/${threadId}/messages`, {
+      headers: {
+        "Authorization": `Bearer ${cc}`,
+        "OpenAI-Beta": "assistants=v2"
+      }
+    });
+    const messagesData = await messagesRes.json();
+    const msg = messagesData.data.find(m => m.role === "assistant");
+    return msg?.content?.[0]?.text?.value || "⚠️ Sin respuesta del Assistant.";
+  } catch (err) {
+    return "Error: " + err.message;
+  }
+}
+ 
 let iaEnProceso = false;
 
 async function actualizarYConsultarIA() {
