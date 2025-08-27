@@ -1,68 +1,134 @@
 $(document).ready(function() {
   console.log("Script funcionando correctamente.");
 
-(() => {
-  const inputDocente = document.querySelector('#element_1');   // Campo docente
-  const inputClase   = document.querySelector('#element_10');  // Input con autocompletado
-  const elem3 = document.querySelector('#element_3');
-  const elem4 = document.querySelector('#element_4');
+  const inputDocente = $('#element_1');   // Campo docente
+  const inputClase   = $('#element_10');  // Input para autocompletado
+  const elem3 = $('#element_3');
+  const elem4 = $('#element_4');
 
   let datosRecibidos = [];
-  let awesomplete;
 
-  // Estado inicial: limpia campos y autocompletado
+  // Crear contenedor para sugerencias
+  const suggestionBox = $('<ul>', {
+    id: 'autocomplete-list',
+    css: {
+      position: 'absolute',
+      border: '1px solid #ccc',
+      background: '#fff',
+      listStyle: 'none',
+      padding: '0',
+      margin: '0',
+      width: inputClase.outerWidth(),
+      zIndex: 9999,
+      display: 'none',
+      maxHeight: '150px',
+      overflowY: 'auto',
+      borderRadius: '6px',
+      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+      fontFamily: 'Roboto, sans-serif',
+      fontSize: '14px'
+    }
+  }).insertAfter(inputClase);
+
+  // Estado inicial
   const estadoInicial = () => {
-    inputClase.value = '';
-    inputClase.disabled = true;
-    elem3.value = '';
-    elem4.value = '';
-    if (awesomplete) awesomplete.list = [];
+    inputClase.val('').prop('disabled', true);
+    elem3.val('');
+    elem4.val('');
+    suggestionBox.hide().empty();
   };
 
   // Mostrar cargando
   const cargarCargando = () => {
-    inputClase.value = 'Cargando clases asociadas...';
-    inputClase.disabled = true;
+    inputClase.val('Cargando clases asociadas...').prop('disabled', true);
+    suggestionBox.hide().empty();
   };
 
   // Sin resultados
   const cargarSinResultados = () => {
-    inputClase.value = 'SIN clases asociadas al docente remoto';
-    inputClase.disabled = true;
-    if (awesomplete) awesomplete.list = [];
+    inputClase.val('SIN clases asociadas al docente remoto').prop('disabled', true);
+    suggestionBox.hide().empty();
   };
 
-  // Cargar sugerencias en Awesomplete
-  const cargarOpciones = () => {
-    const lista = datosRecibidos.map(arr => arr[0]); // Solo nombres de clase
-    if (!awesomplete) {
-      awesomplete = new Awesomplete(inputClase, {
-        list: lista,
-        minChars: 1,
-        autoFirst: true
-      });
-    } else {
-      awesomplete.list = lista;
-    }
-    inputClase.value = '';
-    inputClase.disabled = false;
+  // Mostrar sugerencias
+  const mostrarSugerencias = (lista) => {
+    suggestionBox.empty();
+    lista.forEach(item => {
+      $('<li>', {
+        text: item,
+        css: {
+          padding: '8px',
+          cursor: 'pointer'
+        }
+      })
+      .on('mousedown', function() {
+        inputClase.val(item);
+        suggestionBox.hide();
+        actualizarCamposDependientes(item);
+      })
+      .hover(
+        function() { $(this).css('background', '#f0f0f0'); },
+        function() { $(this).css('background', '#fff'); }
+      )
+      .appendTo(suggestionBox);
+    });
+    suggestionBox.show();
   };
 
-  // Validar y actualizar campos dependientes
+  // Actualizar campos dependientes
   const actualizarCamposDependientes = (valorSeleccionado) => {
     const fila = datosRecibidos.find(arr => arr[0] === valorSeleccionado);
     if (fila) {
-      elem3.value = fila[1] || '';
-      elem4.value = [fila[2], fila[3]].filter(Boolean).join(' - ');
+      elem3.val(fila[1] || '');
+      elem4.val([fila[2], fila[3]].filter(Boolean).join(' - '));
     } else {
-      elem3.value = '';
-      elem4.value = '';
+      elem3.val('');
+      elem4.val('');
     }
   };
 
+  // Evento: filtrar sugerencias mientras se escribe
+  inputClase.on('input', function() {
+    const valor = $(this).val().toLowerCase();
+    if (!valor) {
+      suggestionBox.hide();
+      return;
+    }
+    const listaFiltrada = datosRecibidos
+      .map(arr => arr[0])
+      .filter(item => item.toLowerCase().includes(valor));
+
+    if (listaFiltrada.length > 0) {
+      mostrarSugerencias(listaFiltrada);
+    } else {
+      suggestionBox.hide();
+    }
+  });
+
+  // Evento: mostrar todas las sugerencias al enfocar
+  inputClase.on('focus', function() {
+    if (datosRecibidos.length > 0) {
+      const listaCompleta = datosRecibidos.map(arr => arr[0]);
+      mostrarSugerencias(listaCompleta);
+    }
+  });
+
+  // Ocultar sugerencias si se hace clic fuera
+  $(document).on('click', function(e) {
+    if (!$(e.target).closest(inputClase).length && !$(e.target).closest(suggestionBox).length) {
+      suggestionBox.hide();
+    }
+  });
+
+  // Validar cuando pierde foco
+  inputClase.on('blur', function() {
+    const valor = $(this).val().trim();
+    actualizarCamposDependientes(valor);
+  });
+
   // Evento: cuando se escribe el docente (element_1)
-  inputDocente?.addEventListener('input', async () => {
-    const valor = inputDocente.value.trim();
+  inputDocente.on('input', async function() {
+    const valor = $(this).val().trim();
     estadoInicial();
 
     if (!valor) return;
@@ -80,7 +146,8 @@ $(document).ready(function() {
         return;
       }
 
-      cargarOpciones();
+      inputClase.prop('disabled', false).val('');
+      suggestionBox.hide();
 
     } catch (error) {
       console.error('Error al obtener datos:', error);
@@ -88,14 +155,6 @@ $(document).ready(function() {
     }
   });
 
-  // Evento: cuando pierde foco o elige una clase
-  inputClase?.addEventListener('blur', () => {
-    const valor = inputClase.value.trim();
-    actualizarCamposDependientes(valor);
-  });
-
   // Inicializar
   estadoInicial();
-
-})();
 });
