@@ -1,21 +1,16 @@
-<!-- Agrega estas librerías en el <head> -->
-<link rel="stylesheet" href="https://leaverou.github.io/awesomplete/awesomplete.css" />
-<script src="https://leaverou.github.io/awesomplete/awesomplete.min.js"></script>
-
-<script>
 $(document).ready(function() {
   console.log("Script funcionando correctamente.");
 
 (() => {
   const inputDocente = document.querySelector('#element_1');   // Campo docente
-  const inputClase   = document.querySelector('#element_10');  // NUEVO: Input con autocompletado
+  const inputClase   = document.querySelector('#element_10');  // Input con autocompletado
   const elem3 = document.querySelector('#element_3');
   const elem4 = document.querySelector('#element_4');
 
   let datosRecibidos = [];
   let awesomplete;
 
-  /** Estado inicial: limpia campos y autocompletado **/
+  // Estado inicial: limpia campos y autocompletado
   const estadoInicial = () => {
     inputClase.value = '';
     inputClase.disabled = true;
@@ -24,20 +19,20 @@ $(document).ready(function() {
     if (awesomplete) awesomplete.list = [];
   };
 
-  /** Mostrar cargando **/
+  // Mostrar cargando
   const cargarCargando = () => {
     inputClase.value = 'Cargando clases asociadas...';
     inputClase.disabled = true;
   };
 
-  /** Sin resultados **/
+  // Sin resultados
   const cargarSinResultados = () => {
     inputClase.value = 'SIN clases asociadas al docente remoto';
     inputClase.disabled = true;
     if (awesomplete) awesomplete.list = [];
   };
 
-  /** Cargar sugerencias en Awesomplete **/
+  // Cargar sugerencias en Awesomplete
   const cargarOpciones = () => {
     const lista = datosRecibidos.map(arr => arr[0]); // Solo nombres de clase
     if (!awesomplete) {
@@ -53,7 +48,7 @@ $(document).ready(function() {
     inputClase.disabled = false;
   };
 
-  /** Validar y actualizar campos dependientes **/
+  // Validar y actualizar campos dependientes
   const actualizarCamposDependientes = (valorSeleccionado) => {
     const fila = datosRecibidos.find(arr => arr[0] === valorSeleccionado);
     if (fila) {
@@ -65,7 +60,7 @@ $(document).ready(function() {
     }
   };
 
-  /** Evento: cuando se escribe el docente (element_1) **/
+  // Evento: cuando se escribe el docente (element_1)
   inputDocente?.addEventListener('input', async () => {
     const valor = inputDocente.value.trim();
     estadoInicial();
@@ -93,7 +88,7 @@ $(document).ready(function() {
     }
   });
 
-  /** Evento: cuando pierde foco o elige una clase **/
+  // Evento: cuando pierde foco o elige una clase
   inputClase?.addEventListener('blur', () => {
     const valor = inputClase.value.trim();
     actualizarCamposDependientes(valor);
@@ -104,4 +99,3 @@ $(document).ready(function() {
 
 })();
 });
-</script>
