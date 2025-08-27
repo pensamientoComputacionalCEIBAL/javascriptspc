@@ -1,7 +1,7 @@
 $(document).ready(function() {
   console.log("Script funcionando correctamente.");
 
-  /*
+  
   // Script para saltear la primera página.
   let urlActual = window.location.href;
   console.log("MachForm: URL actual", urlActual);
@@ -13,7 +13,7 @@ $(document).ready(function() {
     else { urlActual = urlActual.replace("&mf_page=1", "&mf_page=2"); }
     window.location.href = urlActual;
   }
-  else { console.log("MachForm: No estamos en la página 1, el script no hará nada."); } */
+  else { console.log("MachForm: No estamos en la página 1, el script no hará nada."); }
 
   let element21 = document.getElementById('element_21');
   let element22 = document.getElementById('element_22');
