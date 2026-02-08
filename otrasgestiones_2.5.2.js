@@ -23,7 +23,7 @@ $('#element_2').change(function(){
     case "Felipe Montes": $("#element_3").val('fmontes@ceibal.edu.uy'); break;
     case "Flavia Altolaguirre": $("#element_3").val('faltolaguirre@ceibal.edu.uy'); break;
     case "Ignacio Martinez": $("#element_3").val('igmartinez@ceibal.edu.uy'); break;
-    case "Irena Perazza": $("#element_3").val('iperazza@ceibal.edu.uy'); break;
+    case "Irene Perazza": $("#element_3").val('iperazza@ceibal.edu.uy'); break;
     case "Kalahan Dutra": $("#element_3").val('kdutra@ceibal.edu.uy'); break;
     case "Laura Pedroza": $("#element_3").val('lapedroza@ceibal.edu.uy'); break;
     case "Luciana Prudente": $("#element_3").val('lprudente@ceibal.edu.uy'); break;
@@ -49,6 +49,7 @@ $('#element_2').change(function(){
     case "Victoria Alonso": $("#element_3").val('maalonso@ceibal.edu.uy'); break;
     case "Yenniffer de los Santos": $("#element_3").val('ydelossantos@ceibal.edu.uy'); break;
     case "Yhonny Hernández": $("#element_3").val('yhernandez@ceibal.edu.uy'); break;
+    case "​Patricia Mosquera": $("#element_3").val('amosquera@ceibal.edu.uy'); break;  
     case "Irina Rodriguez": $("#element_3").val('irrodriguez@ceibal.edu.uy'); break;
     case "Emilia Casaravilla": $("#element_3").val('ecasaravilla@ceibal.edu.uy'); break;
     case "Patricia Goñez": $("#element_3").val('pgonez@ceibal.edu.uy'); break;
