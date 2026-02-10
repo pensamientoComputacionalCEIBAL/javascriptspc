@@ -175,6 +175,7 @@ function determinarViajes(x) {
   else if (x > 1 && x <= 2) { return "Viaje 1 - 2 horas"; }
   else if (x > 2 && x <= 6) { return "Viaje 2 - 6 horas"; }
   else if (x > 6) { return "Viaje +6 horas"; }
+  else { return "Sin viaje"; }
 }
 
 // Función para obtener y validar la fecha y hora
