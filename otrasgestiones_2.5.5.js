@@ -53,6 +53,7 @@ $('#element_2').change(function(){
     case "Irina Rodriguez": $("#element_3").val('irrodriguez@ceibal.edu.uy'); break;
     case "Emilia Casaravilla": $("#element_3").val('ecasaravilla@ceibal.edu.uy'); break;
     case "Patricia Goñez": $("#element_3").val('pgonez@ceibal.edu.uy'); break;
+    case "Valentina Viera": $("#element_3").val('vviera@ceibal.edu.uy'); break;
   }
 });
 
